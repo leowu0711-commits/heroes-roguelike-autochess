@@ -42,7 +42,7 @@ const HEROES = [
   hero("wu-zetian", "武则天", 4, "盛唐", "帝王", 150, 20, 285, "魔法"),
   hero("li-jing", "李靖", 4, "隋唐", "骑兵", 175, 27, 295, "物理"),
   hero("xingtian", "刑天", 4, "山海", "武将", 220, 30, 360, "神话"),
-  hero("jiuweihu", "九尾狐", 4, "妖族", "异士", 130, 18, 270, "神话"),
+  hero("jiuweihu", "九尾狐", 4, "妖族", "刺客", 130, 18, 270, "神话"),
   hero("zhang-sanfeng", "张三丰", 4, "仙门", "方士", 135, 16, 300, "魔法"),
   hero("liu-bowen", "刘伯温", 4, "明清", "文臣", 125, 15, 260, "魔法"),
   hero("xuanyuan", "轩辕黄帝", 5, "神话", "帝王", 230, 32, 420, "神话"),
@@ -125,7 +125,7 @@ const SYNERGY_DEFINITIONS = {
   "秦汉": synergy("种族", [
     tier(3, 0.16, "秦汉棋子物理伤害提高，低费三星更能顶关"),
     tier(6, 0.28, "秦汉棋子额外获得军阵护甲和物理增伤"),
-    tier(9, 0.46, "秦汉每次普攻叠军势，结算分数继续滚高"),
+    tier(8, 0.46, "秦汉每次普攻叠军势，结算分数继续滚高"),
   ]),
   "三国": synergy("种族", [
     tier(3, 0.15, "三国棋子放技能后给一名三国友军回蓝"),
@@ -135,12 +135,12 @@ const SYNERGY_DEFINITIONS = {
   "盛唐": synergy("种族", [
     tier(2, 0.12, "盛唐棋子获得暴击率"),
     tier(4, 0.24, "暴击伤害提高，适合刺客和射手"),
-    tier(6, 0.42, "暴击时触发诗酒追击并回蓝"),
+    tier(5, 0.42, "暴击时触发诗酒追击并回蓝"),
   ]),
   "大宋": synergy("种族", [
     tier(2, 0.1, "减少环境伤害并提高稳定收益"),
     tier(4, 0.22, "大宋棋子开局获得护盾"),
-    tier(6, 0.38, "护盾触发时给全队回蓝，防守转输出"),
+    tier(5, 0.38, "护盾触发时给全队回蓝，防守转输出"),
   ]),
   "神话": synergy("种族", [
     tier(2, 0.14, "神话棋子开局获得法力"),
@@ -150,37 +150,30 @@ const SYNERGY_DEFINITIONS = {
   "山海": synergy("种族", [
     tier(2, 0.12, "击杀后山海棋子本关成长"),
     tier(4, 0.26, "击杀成长影响全队"),
-    tier(6, 0.45, "击杀有概率让山海棋子立刻回满法力"),
   ]),
   "先秦": synergy("种族", [
     tier(2, 0.12, "1费、2费先秦棋子伤害提高"),
-    tier(4, 0.3, "先秦三星棋子额外获得最终伤害和护甲"),
+    tier(3, 0.3, "先秦三星棋子额外获得最终伤害和护甲"),
   ]),
   "楚汉": synergy("种族", [
     tier(2, 0.14, "生命越低伤害越高"),
-    tier(4, 0.34, "首次濒死保留1血并立刻释放技能"),
   ]),
   "魏晋": synergy("种族", [
-    tier(2, 0.12, "魏晋棋子获得闪避"),
-    tier(4, 0.32, "闪避后回蓝，并提高下一次技能伤害"),
+    tier(1, 0.12, "魏晋棋子获得闪避"),
   ]),
   "隋唐": synergy("种族", [
     tier(2, 0.13, "开局前几秒攻速提高"),
-    tier(4, 0.33, "开局第一次普攻或技能必定暴击"),
   ]),
   "明清": synergy("种族", [
     tier(2, 0.12, "后排普攻附带火器伤害"),
-    tier(4, 0.35, "每隔数秒按后排人数发射火器齐射"),
+    tier(3, 0.35, "每隔数秒按后排人数发射火器齐射"),
   ]),
   "仙门": synergy("种族", [
     tier(2, 0.14, "仙门棋子回蓝提高"),
-    tier(4, 0.3, "第一次技能后给最低法力友军回蓝"),
-    tier(6, 0.5, "技能有概率不清空法力，直接循环"),
   ]),
   "妖族": synergy("种族", [
     tier(1, 0.12, "场上只有一种妖族时，该妖族获得强力加成"),
     tier(2, 0.22, "妖族技能附带魅惑和易伤"),
-    tier(4, 0.42, "妖族不再冲突，并放大异常伤害"),
   ]),
   "武将": synergy("职业", [
     tier(3, 0.16, "武将普攻提高"),
@@ -207,24 +200,21 @@ const SYNERGY_DEFINITIONS = {
   "骑兵": synergy("职业", [
     tier(2, 0.12, "开局攻速提高"),
     tier(4, 0.28, "开局造成一次冲锋伤害"),
-    tier(6, 0.46, "冲锋后获得护盾，并让敌方易伤"),
   ]),
   "步兵": synergy("职业", [
     tier(2, 0.1, "步兵获得护甲"),
     tier(4, 0.24, "步兵受伤时给后排回蓝"),
-    tier(6, 0.42, "步兵死亡时触发死守，给全队护盾"),
   ]),
   "射手": synergy("职业", [
     tier(3, 0.16, "射手普攻伤害提高"),
-    tier(6, 0.4, "射手每数次攻击连射，优先高价值目标"),
+    tier(5, 0.4, "射手每数次攻击连射，优先高价值目标"),
   ]),
   "方士": synergy("职业", [
     tier(3, 0.18, "敌方法术减伤降低"),
-    tier(6, 0.44, "方士技能叠法印，后续技能按层数增伤"),
+    tier(5, 0.44, "方士技能叠法印，后续技能按层数增伤"),
   ]),
   "工匠": synergy("职业", [
     tier(2, 0.14, "装备效果提高"),
-    tier(4, 0.34, "每件装备额外触发回蓝、护盾或追击副效果"),
   ]),
 };
 
@@ -247,7 +237,7 @@ function createState() {
     stage: 1,
     hp: 100,
     gold: 3,
-    level: 2,
+    level: 1,
     xp: 0,
     shop: [],
     bench: [],
@@ -266,7 +256,7 @@ function createState() {
 export function getSellValue(owned) {
   const config = getHeroConfig(owned.id);
   const copies = owned.star === 1 ? 1 : owned.star === 2 ? 3 : 9;
-  return (config?.cost ?? 1) * copies;
+  return Math.max(1, Math.floor(((config?.cost ?? 1) * copies) / 2));
 }
 
 export function getPlayableHeroes() {
@@ -283,26 +273,44 @@ export function getSynergyDefinitions() {
   ]));
 }
 
+export function getSynergyCatalog() {
+  return Object.entries(SYNERGY_DEFINITIONS).map(([name, definition]) => ({
+    name,
+    kind: definition.kind,
+    tiers: definition.tiers.map((tierConfig) => ({ ...tierConfig })),
+  }));
+}
+
 export function getInterestGold(gold) {
   return Math.min(4, Math.floor(gold / 10));
 }
 
 export function resolveRoundIncome(input) {
-  const baseGold = 5;
+  const baseGold = getBaseGold(input.stage);
   const nextStreak = getNextStreak(input.previousStreak, input.won);
   const streakGold = getStreakGold(nextStreak);
+  const winGold = input.won && isNormalStageNumber(input.stage) ? 1 : 0;
   const creepGold = input.creepGold ?? 0;
   const relicGold = input.relicGold ?? 0;
-  const interest = getInterestGold(input.goldBeforeIncome + baseGold + creepGold + streakGold);
+  const interest = getInterestGold(input.goldBeforeIncome + baseGold + winGold + creepGold + streakGold);
   return {
     baseGold,
     creepGold,
+    winGold,
     streakGold,
     interest,
     relicGold,
-    total: baseGold + creepGold + streakGold + interest + relicGold,
+    total: baseGold + winGold + creepGold + streakGold + interest + relicGold,
     nextStreak,
   };
+}
+
+function getBaseGold(stage) {
+  return Math.min(5, Math.max(1, stage));
+}
+
+function isNormalStageNumber(stage) {
+  return ![1, 2, 3].includes(stage) && stage % 5 !== 0;
 }
 
 function getNextStreak(previous, won) {
@@ -314,8 +322,9 @@ function getNextStreak(previous, won) {
 
 function getStreakGold(streak) {
   if (streak.count >= 6) return 3;
+  if (streak.count >= 5) return 3;
   if (streak.count >= 4) return 2;
-  if (streak.count >= 2) return 1;
+  if (streak.count >= 3) return 1;
   return 0;
 }
 
@@ -344,6 +353,89 @@ export function getTraitTone(name, kind) {
 
 export function shouldRollWildcard(roll) {
   return roll < 0.01;
+}
+
+export function buildScoreBursts(board, synergyMultiplier = 1, flatBonus = 0) {
+  const baseValues = board.map((owned, index) => {
+    const config = getHeroConfig(owned.id);
+    return {
+      slotIndex: index,
+      heroId: owned.id,
+      heroName: config.name,
+      damageType: config.type,
+      amount: (config.attack * 30 + config.skill * 3 + config.hp * 0.25) * owned.star,
+    };
+  });
+  const expectedTotal = Math.round((baseValues.reduce((sum, item) => sum + item.amount, 0) + flatBonus) * synergyMultiplier);
+  let runningTotal = 0;
+  return baseValues.map((item, index) => {
+    const amount = index === baseValues.length - 1
+      ? expectedTotal - runningTotal
+      : Math.max(1, Math.round(item.amount * synergyMultiplier));
+    runningTotal += amount;
+    return {
+      slotIndex: item.slotIndex,
+      heroId: item.heroId,
+      heroName: item.heroName,
+      damageType: item.damageType,
+      amount,
+      runningTotal,
+      delayMs: index * 140,
+    };
+  });
+}
+
+export function getXpNeededForLevel(level) {
+  return {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 4,
+    5: 24,
+    6: 16,
+    7: 40,
+    8: 56,
+    9: 64,
+  }[level] ?? 999;
+}
+
+export function getOwnedHeroCount(heroId, board, bench) {
+  return [...board, ...bench]
+    .filter((owned) => owned.id === heroId)
+    .reduce((total, owned) => total + (owned.star === 1 ? 1 : owned.star === 2 ? 3 : 9), 0);
+}
+
+export function getSynergyBadges(rows) {
+  const byName = new Map();
+  for (const row of rows) {
+    const badge = byName.get(row.name) ?? {
+      name: row.name,
+      count: row.count,
+      active: false,
+      activeThreshold: 0,
+      nextThreshold: null,
+    };
+    if (row.active && row.threshold >= badge.activeThreshold) {
+      badge.active = true;
+      badge.activeThreshold = row.threshold;
+    }
+    if (!row.active && (badge.nextThreshold === null || row.threshold < badge.nextThreshold)) {
+      badge.nextThreshold = row.threshold;
+    }
+    byName.set(row.name, badge);
+  }
+  return [...byName.values()].map((badge) => ({
+    ...badge,
+    label: badge.nextThreshold ? `${badge.count}/${badge.nextThreshold}` : `${badge.count}/${badge.activeThreshold}`,
+  })).sort((a, b) => Number(b.active) - Number(a.active) || a.name.localeCompare(b.name));
+}
+
+function getBuyXpCost() {
+  return 5;
+}
+
+function getBuyXpAmount() {
+  return 4;
 }
 
 function rollShopCost(level, roll) {
@@ -538,6 +630,7 @@ function renderStats() {
   document.querySelector("#stats").innerHTML = stats.map(([label, value]) => `
     <div class="stat"><span>${label}</span><strong>${value}</strong></div>
   `).join("");
+  document.querySelector("#shopGold").textContent = `${state.gold}金`;
   document.querySelector("#phaseText").textContent = state.gameOver ? "游戏结束" : state.lastResult ? "结算阶段" : "布阵阶段";
   document.querySelector("#refreshBtn").disabled = state.gameOver || Boolean(state.lastResult);
   document.querySelector("#xpBtn").disabled = state.gameOver || Boolean(state.lastResult);
@@ -546,16 +639,21 @@ function renderStats() {
 }
 
 function renderShop() {
-  document.querySelector("#shop").innerHTML = state.shop.map((shopHero, index) => `
-    <article class="hero-card star-1 ${shopHero.special ? "wildcard-card" : ""}" style="--race:${raceColors[shopHero.race]}">
-      <div class="portrait">${shopHero.name.slice(0, 1)}</div>
-      <div>
-        <div class="hero-name">${shopHero.name}</div>
-        ${heroSynergyChips(shopHero)}
-      </div>
-      <button type="button" data-buy="${index}"><span class="cost">${shopHero.cost}金</span></button>
-    </article>
-  `).join("");
+  document.querySelector("#shop").innerHTML = state.shop.map((shopHero, index) => {
+    const ownedCount = getOwnedHeroCount(shopHero.id, state.board, state.bench);
+    const chaseClass = ownedCount >= 2 ? "chase-ready" : ownedCount > 0 ? "chase-owned" : "";
+    return `
+      <article class="hero-card star-1 ${shopHero.special ? "wildcard-card" : ""} ${chaseClass}" style="--race:${raceColors[shopHero.race]}">
+        <div class="portrait">${shopHero.name.slice(0, 1)}</div>
+        <div>
+          <div class="hero-name">${shopHero.name}</div>
+          ${ownedCount > 0 ? `<div class="chase-mark">${ownedCount >= 2 ? "可追" : "已有"} ${ownedCount}</div>` : ""}
+          ${heroSynergyChips(shopHero)}
+        </div>
+        <button type="button" data-buy="${index}"><span class="cost">${shopHero.cost}金</span></button>
+      </article>
+    `;
+  }).join("");
 }
 
 function renderBoard() {
@@ -629,22 +727,19 @@ function traitTags(config) {
 }
 
 function renderSynergies() {
-  const rows = getSynergyRows();
-  const active = rows.filter((row) => row.active);
-  const pending = rows.filter((row) => !row.active);
-  document.querySelector("#synergies").innerHTML = rows.length
-    ? `
-      ${active.map(synergyRow).join("")}
-      ${pending.map(synergyRow).join("")}
-    `
-    : `<div class="synergy">上阵英雄后显示羁绊</div>`;
+  const badges = getSynergyBadges(getSynergyRows());
+  document.querySelector("#synergies").innerHTML = badges.length
+    ? badges.map(synergyBadge).join("")
+    : `<div class="synergy-empty">上阵后显示羁绊</div>`;
 }
 
-function synergyRow(row) {
+function synergyBadge(row) {
+  const definition = SYNERGY_DEFINITIONS[row.name];
+  const kind = definition?.kind === "种族" ? "race" : "job";
   return `
-    <div class="synergy ${row.active ? "active" : ""}">
-      <strong>${row.name} ${row.count}/${row.threshold}</strong>
-      <span>${row.active ? "已触发" : `还差 ${row.threshold - row.count}`} · ${row.text}</span>
+    <div class="synergy-badge ${row.active ? "active" : ""}" style="--trait:${getTraitTone(row.name, kind)}" title="${row.name}">
+      <strong>${row.name.slice(0, 2)}</strong>
+      <span>${row.label}</span>
     </div>
   `;
 }
@@ -671,6 +766,14 @@ function renderInventory() {
 }
 
 function renderCompendium() {
+  document.querySelector("#codexSynergies").innerHTML = ["种族", "职业"].map((kind) => `
+    <section class="codex-group">
+      <h4>${kind}羁绊</h4>
+      <div class="codex-strip synergy-codex-strip">
+        ${getSynergyCatalog().filter((item) => item.kind === kind).map(synergyCodexCard).join("")}
+      </div>
+    </section>
+  `).join("");
   document.querySelector("#codexHeroes").innerHTML = groupHeroesByCost([...HEROES, WILDCARD]).map((group) => `
     <section class="codex-group">
       <h4>${group.cost}费英雄</h4>
@@ -705,10 +808,28 @@ function heroCodexCard(config) {
         <strong>${config.name} · ${config.cost}金</strong>
         ${traitTags(config)}
         <p>生命 ${config.hp} · 普攻 ${config.attack} · 技能 ${config.skill}</p>
-        <p>${config.race}/${config.job}：2人 +12%，4人 +18%；异士会降低其他羁绊门槛。</p>
+        <p>${getHeroSynergySummary(config)}</p>
       </div>
     </article>
   `;
+}
+
+function synergyCodexCard(item) {
+  return `
+    <article class="codex-line synergy-codex-card" style="--trait:${getTraitTone(item.name, item.kind === "种族" ? "race" : "job")}">
+      <strong>${item.name} · ${item.kind}</strong>
+      ${item.tiers.map((tierConfig) => `<span>${tierConfig.count}人：${tierConfig.text}</span>`).join("")}
+    </article>
+  `;
+}
+
+function getHeroSynergySummary(config) {
+  if (config.special) return "特殊棋子：不能上阵，只参与合成。";
+  return [config.race, config.job].map((name) => {
+    const definition = SYNERGY_DEFINITIONS[name];
+    if (!definition) return "";
+    return `${name}：${definition.tiers.map((tierConfig) => `${tierConfig.count}人`).join(" / ")}，${definition.tiers[0].text}`;
+  }).filter(Boolean).join("；");
 }
 
 function groupEquipmentByTier(items) {
@@ -731,12 +852,18 @@ function renderBattle() {
   const enemies = getEnemyWave();
   const centerLabel = state.lastResult ? "战斗结果" : "目标分";
   const centerValue = state.lastResult ? getBattleOutcomeTitle(state.lastResult.won) : targetScore();
+  const bursts = state.lastResult?.bursts ?? [];
   document.querySelector("#battleField").innerHTML = `
     <div class="battle-side heroes">
       ${state.board.length ? state.board.map((owned, index) => battleHeroCard(owned, index)).join("") : `<div class="battle-card">未上阵</div>`}
     </div>
     <div class="battle-center">
       <div class="score-target ${state.lastResult ? state.lastResult.won ? "score-win" : "score-loss" : ""}">${centerLabel}<strong>${centerValue}</strong><span>目标 ${targetScore()}</span></div>
+      ${bursts.length ? `
+        <div class="score-rush" aria-label="score burst total">
+          ${bursts.map((burst) => `<span style="--delay:${burst.delayMs}ms">+${burst.runningTotal}</span>`).join("")}
+        </div>
+      ` : ""}
       <div class="clash-line"></div>
     </div>
     <div class="battle-side enemies">
@@ -762,6 +889,7 @@ function renderBattle() {
           ${state.battleLog.map((line) => `<div>${line}</div>`).join("")}
           <div>分数 ${state.lastResult.score} / ${state.lastResult.target}</div>
           <div>固定 +${state.lastResult.income.baseGold}</div>
+          <div>胜利 +${state.lastResult.income.winGold}</div>
           <div>野怪 +${state.lastResult.income.creepGold}</div>
           <div>连胜/连败 +${state.lastResult.income.streakGold}</div>
           <div>利息 +${state.lastResult.income.interest}</div>
@@ -776,6 +904,7 @@ function renderBattle() {
 
 function battleHeroCard(owned, index) {
   const config = getHeroConfig(owned.id);
+  const burst = state.lastResult?.bursts?.find((item) => item.slotIndex === index);
   return `
     <div class="battle-card fighter star-${owned.star}" style="--race:${raceColors[config.race]}; animation-delay:${index * 90}ms">
       <div class="portrait">${config.name.slice(0, 1)}</div>
@@ -783,6 +912,7 @@ function battleHeroCard(owned, index) {
       ${heroSynergyChips(config)}
       <p>普攻 ${config.attack * owned.star}</p>
       <p>技能 ${config.skill * owned.star}</p>
+      ${burst ? `<div class="damage-pop" style="--damage:${getTraitTone(burst.damageType, "damage")}; --delay:${burst.delayMs}ms">+${burst.amount}</div>` : ""}
     </div>
   `;
 }
@@ -811,9 +941,9 @@ function refreshShop() {
 }
 
 function buyXp() {
-  if (isPrepLocked() || state.gold < 4) return;
-  state.gold -= 4;
-  gainXp(4);
+  if (isPrepLocked() || state.gold < getBuyXpCost()) return;
+  state.gold -= getBuyXpCost();
+  gainXp(getBuyXpAmount());
   render();
 }
 
@@ -880,6 +1010,7 @@ function resolveBattleResult() {
   const creepGold = stageCreepGold();
   const relicGold = hasRelic("聚宝盆") ? 1 : 0;
   const income = resolveRoundIncome({
+    stage: state.stage,
     won,
     goldBeforeIncome: state.gold,
     previousStreak: state.streak,
@@ -887,7 +1018,8 @@ function resolveBattleResult() {
     relicGold,
   });
   const xpGain = hasRelic("太学令") ? 2 : 1;
-  return { won, score, target, goldGain: income.total, income, xpGain, hpLost };
+  const bursts = buildScoreBursts(state.board, getSynergyBonus(), state.equipment.length * 70);
+  return { won, score, target, goldGain: income.total, income, xpGain, hpLost, bursts };
 }
 
 function buildBattleLog(result) {
@@ -1033,7 +1165,7 @@ function gainXp(amount) {
 }
 
 function xpNeeded() {
-  return [0, 1, 1, 2, 4, 8, 16, 24, 32, 40][state.level] ?? 999;
+  return getXpNeededForLevel(state.level);
 }
 
 function targetScore() {

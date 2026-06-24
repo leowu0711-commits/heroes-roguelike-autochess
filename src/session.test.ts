@@ -53,13 +53,13 @@ describe("game session flow", () => {
     let session = createGameSession({ gold: 12, shopRandomValues: [0.01, 0.11, 0.21, 0.31, 0.41] });
 
     session = buyXp(session);
-    assert.equal(session.player.gold, 8);
+    assert.equal(session.player.gold, 7);
     assert.equal(session.player.level, 4);
     assert.equal(session.player.xp, 0);
 
     const firstShop = [...session.shop];
     session = refreshShop(session, [0.99, 0.98, 0.01, 0.02, 0.03]);
-    assert.equal(session.player.gold, 6);
+    assert.equal(session.player.gold, 5);
     assert.notDeepEqual(session.shop, firstShop);
 
     session = { ...session, shop: ["jing-ke", "jing-ke", "jing-ke"] };
@@ -77,7 +77,7 @@ describe("game session flow", () => {
 
     session = sellBenchSlot(session, 0);
     assert.equal(session.player.bench.length, 0);
-    assert.equal(session.player.gold, 6);
+    assert.equal(session.player.gold, 3);
   });
 
   it("claims equipment chests, equips up to three items, and unequips back to inventory", () => {

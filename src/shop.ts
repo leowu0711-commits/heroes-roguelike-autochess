@@ -51,9 +51,9 @@ const XP_TO_NEXT_LEVEL: Record<number, number> = {
   2: 1,
   3: 2,
   4: 4,
-  5: 8,
+  5: 24,
   6: 16,
-  7: 24,
+  7: 40,
 };
 
 export function createInitialPool(entries: PoolEntryInput[]): HeroPool {
@@ -179,8 +179,8 @@ export function grantRoundExperience(player: PlayerState): PlayerState {
 }
 
 export function buyExperience(player: PlayerState): PlayerState {
-  if (player.gold < 4) return player;
-  return applyExperience({ ...player, gold: player.gold - 4 }, 4);
+  if (player.gold < 5) return player;
+  return applyExperience({ ...player, gold: player.gold - 5 }, 4);
 }
 
 function applyExperience(player: PlayerState, amount: number): PlayerState {
@@ -212,7 +212,7 @@ function copiesForStar(star: 1 | 2 | 3): number {
 }
 
 function sellValue(cost: number, star: 1 | 2 | 3): number {
-  return cost * copiesForStar(star);
+  return Math.max(1, Math.floor((cost * copiesForStar(star)) / 2));
 }
 
 function copiesForCost(cost: HeroCost): number {

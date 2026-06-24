@@ -3,12 +3,17 @@ import test from "node:test";
 
 import {
   getPlayableHeroes,
+  getSynergyCatalog,
   getSynergyDefinitions,
   groupHeroesByCost,
   getHeroSynergyTags,
   getBattleOutcomeTitle,
   getTraitTone,
   getInterestGold,
+  getXpNeededForLevel,
+  buildScoreBursts,
+  getOwnedHeroCount,
+  getSynergyBadges,
   resolveRoundIncome,
   getSellValue,
   mergeRosterCopies,
@@ -36,11 +41,63 @@ test("uses the expanded 52 hero roster with thirteen races and ten jobs", () => 
 test("uses varied synergy tiers instead of one shared threshold ladder", () => {
   const definitions = getSynergyDefinitions();
 
-  assert.deepEqual(definitions["秦汉"].tiers.map((tier) => tier.count), [3, 6, 9]);
+  assert.deepEqual(definitions["秦汉"].tiers.map((tier) => tier.count), [3, 6, 8]);
   assert.deepEqual(definitions["三国"].tiers.map((tier) => tier.count), [3, 6, 9]);
-  assert.deepEqual(definitions["妖族"].tiers.map((tier) => tier.count), [1, 2, 4]);
+  assert.deepEqual(definitions["妖族"].tiers.map((tier) => tier.count), [1, 2]);
   assert.deepEqual(definitions["帝王"].tiers.map((tier) => tier.count), [2, 4]);
   assert.deepEqual(definitions["刺客"].tiers.map((tier) => tier.count), [3, 6]);
+});
+
+test("exposes all synergy effects for the compendium", () => {
+  const catalog = getSynergyCatalog();
+
+  assert.equal(catalog.filter((item) => item.kind === "种族").length, 13);
+  assert.equal(catalog.filter((item) => item.kind === "职业").length, 10);
+  assert.deepEqual(catalog.find((item) => item.name === "秦汉").tiers.map((tier) => tier.count), [3, 6, 8]);
+  assert.equal(catalog.find((item) => item.name === "三国").tiers[2].text.includes("连携"), true);
+});
+
+test("uses the auto chess population experience curve", () => {
+  assert.deepEqual([1, 2, 3, 4, 5, 6, 7, 8, 9].map(getXpNeededForLevel), [1, 1, 2, 4, 24, 16, 40, 56, 64]);
+});
+
+test("counts owned copies across board and bench for shop chase highlights", () => {
+  assert.equal(getOwnedHeroCount("jing-ke", [
+    { id: "jing-ke", star: 1 },
+    { id: "guan-yu", star: 2 },
+  ], [
+    { id: "jing-ke", star: 2 },
+  ]), 4);
+});
+
+test("summarizes current synergies as compact badges", () => {
+  const badges = getSynergyBadges([
+    { name: "刺客", count: 4, threshold: 3, active: true, bonus: 0.18, text: "one" },
+    { name: "刺客", count: 4, threshold: 6, active: false, bonus: 0.42, text: "two" },
+    { name: "三国", count: 2, threshold: 3, active: false, bonus: 0.15, text: "three" },
+  ]);
+
+  assert.deepEqual(badges.map((badge) => ({
+    name: badge.name,
+    count: badge.count,
+    active: badge.active,
+    label: badge.label,
+  })), [
+    { name: "刺客", count: 4, active: true, label: "4/6" },
+    { name: "三国", count: 2, active: false, label: "2/3" },
+  ]);
+});
+
+test("every displayed synergy tier is reachable by real unique heroes", () => {
+  const heroes = getPlayableHeroes();
+  const counts = getSynergyCatalog().map((item) => ({
+    name: item.name,
+    maxTier: item.tiers.at(-1).count,
+    heroCount: heroes.filter((hero) => hero.race === item.name || hero.job === item.name).length,
+  }));
+
+  assert.deepEqual(counts.filter((item) => item.heroCount < item.maxTier), []);
+  assert.equal(counts.find((item) => item.name === "刺客").heroCount, 6);
 });
 
 test("merges three matching heroes across board and bench", () => {
@@ -124,11 +181,14 @@ test("rolls wildcard shop appearance at one percent per refresh", () => {
   assert.equal(shouldRollWildcard(0.01), false);
 });
 
-test("sells upgraded heroes for the value of their copies", () => {
+test("sells heroes for half of their copy value with a one gold floor", () => {
   assert.equal(getSellValue({ id: "jing-ke", star: 1 }), 1);
-  assert.equal(getSellValue({ id: "jing-ke", star: 2 }), 3);
-  assert.equal(getSellValue({ id: "jing-ke", star: 3 }), 9);
-  assert.equal(getSellValue({ id: "guan-yu", star: 2 }), 9);
+  assert.equal(getSellValue({ id: "huo-qubing", star: 1 }), 1);
+  assert.equal(getSellValue({ id: "guan-yu", star: 1 }), 1);
+  assert.equal(getSellValue({ id: "wu-zetian", star: 1 }), 2);
+  assert.equal(getSellValue({ id: "jing-ke", star: 2 }), 1);
+  assert.equal(getSellValue({ id: "jing-ke", star: 3 }), 4);
+  assert.equal(getSellValue({ id: "guan-yu", star: 2 }), 4);
 });
 
 test("caps interest at four gold", () => {
@@ -136,28 +196,47 @@ test("caps interest at four gold", () => {
   assert.equal(getInterestGold(10), 1);
   assert.equal(getInterestGold(39), 3);
   assert.equal(getInterestGold(45), 4);
+  assert.equal(getInterestGold(50), 4);
+  assert.equal(getInterestGold(70), 4);
 });
 
-test("pays base gold, streak gold, and interest even on a loss", () => {
+test("builds staged score bursts for fielded heroes", () => {
+  const bursts = buildScoreBursts([
+    { id: "jing-ke", star: 1 },
+    { id: "guan-yu", star: 2 },
+  ], 1);
+
+  assert.equal(bursts.length, 2);
+  assert.deepEqual(bursts.map((burst) => burst.heroName), ["荆轲", "关羽"]);
+  assert.deepEqual(bursts.map((burst) => burst.slotIndex), [0, 1]);
+  assert.equal(bursts[0].runningTotal, bursts[0].amount);
+  assert.equal(bursts[1].runningTotal, bursts[0].amount + bursts[1].amount);
+  assert.equal(bursts.every((burst) => burst.amount > 0), true);
+});
+
+test("pays staged base gold, loss streak, and interest on a loss", () => {
   assert.deepEqual(resolveRoundIncome({
+    stage: 4,
     won: false,
     goldBeforeIncome: 29,
     previousStreak: { type: "loss", count: 3 },
     creepGold: 0,
     relicGold: 0,
   }), {
-    baseGold: 5,
+    baseGold: 4,
     creepGold: 0,
+    winGold: 0,
     streakGold: 2,
     interest: 3,
     relicGold: 0,
-    total: 10,
+    total: 9,
     nextStreak: { type: "loss", count: 4 },
   });
 });
 
-test("resets streak direction when result changes", () => {
+test("pays normal win gold and resets streak direction when result changes", () => {
   const income = resolveRoundIncome({
+    stage: 6,
     won: true,
     goldBeforeIncome: 8,
     previousStreak: { type: "loss", count: 4 },
@@ -166,8 +245,9 @@ test("resets streak direction when result changes", () => {
   });
 
   assert.equal(income.streakGold, 0);
+  assert.equal(income.winGold, 1);
   assert.deepEqual(income.nextStreak, { type: "win", count: 1 });
-  assert.equal(income.total, 9);
+  assert.equal(income.total, 10);
 });
 
 test("ends the game when hp reaches zero", () => {
