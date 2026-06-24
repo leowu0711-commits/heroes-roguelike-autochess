@@ -45,6 +45,7 @@
   - 利息，10 金 1 利息，最多 4
   - 野怪逐只掉钱
   - Boss 节点奖励
+  - Boss 概率额外掉装备宝箱
 - 商店和棋子池：
   - 5 格商店
   - 1 到 8 人口概率
@@ -83,7 +84,6 @@ npm.cmd test
 
 高优先级：
 
-- `src/economy.ts` 已经有 Boss `extraDrop` 配置，但 `src/session.ts` 还没把额外掉装真正加入 `pendingRewards`。
 - 英雄技能只是第一版数值，还没做精细设计。
 - 装备和英雄技能的化学反应还需要系统设计。
 - 奖励选择还没有 UI 状态。
@@ -177,8 +177,8 @@ npm.cmd test
 
 最推荐的小目标：
 
-1. 给 Boss 额外掉装写失败测试。
-2. 在 `resolveCurrentBattle` 里用确定性随机参数或规则把 `extraDrop` 变成 `pendingRewards`。
+1. 设计每个英雄的具体技能数值和装备联动。
+2. 建一个极简 HTML / Canvas / Cocos 原型界面。
 3. 跑 `npm.cmd test`。
 4. 更新 `README.md` 和本文件的“当前已完成 / 当前还没完成”。
 

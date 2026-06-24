@@ -204,4 +204,31 @@ describe("game session flow", () => {
     session = refreshShop(session, [0.11, 0.12, 0.13, 0.14, 0.15]);
     assert.equal(session.player.gold, 7);
   });
+
+  it("adds a boss extra equipment drop when the drop roll succeeds", () => {
+    let session = createGameSession({ stageNumber: 15 });
+
+    session = resolveCurrentBattle(session, {
+      extraDropRoll: 0.05,
+      extraDropLevelRoll: 0.99,
+    });
+
+    assert.deepEqual(session.pendingRewards, [
+      { type: "equipmentChest", level: 2 },
+      { type: "equipmentChest", level: 2 },
+    ]);
+  });
+
+  it("does not add a boss extra equipment drop when the drop roll fails", () => {
+    let session = createGameSession({ stageNumber: 15 });
+
+    session = resolveCurrentBattle(session, {
+      extraDropRoll: 0.5,
+      extraDropLevelRoll: 0,
+    });
+
+    assert.deepEqual(session.pendingRewards, [
+      { type: "equipmentChest", level: 2 },
+    ]);
+  });
 });

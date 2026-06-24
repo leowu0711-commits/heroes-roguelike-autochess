@@ -142,7 +142,7 @@ Boss / 野怪节点：
 - 第 35 关：装备宝箱 4 级；有概率掉 1-4 级装备。
 - 第 40 关：圣物宝箱；有概率掉 1-4 级装备。
 
-注意：`src/economy.ts` 里已经配置了 Boss `extraDrop` 的概率和等级范围，但当前 `src/session.ts` 还没有把额外掉装真正结算成待领取奖励，这是后续可做的小任务。
+注意：Boss `extraDrop` 已经接入 `resolveCurrentBattle`，命中概率时会额外加入一个装备宝箱到 `pendingRewards`。
 
 ## 环境伤害
 
@@ -177,7 +177,7 @@ npm.cmd test
 
 建议周末优先做：
 
-1. 把 Boss `extraDrop` 真正接入 `resolveCurrentBattle`，让额外掉装进入 `pendingRewards`。
-2. 补测试覆盖“必掉 / 不掉 / 按等级掉”的确定性随机。
-3. 再开始整理英雄技能数值与装备联动表。
-4. 不要急着做大界面，先做一个能跑通准备阶段和战斗结算的低保真 playable demo。
+1. 整理英雄技能数值与装备联动表。
+2. 做一个能跑通准备阶段和战斗结算的低保真 playable demo。
+3. 补圣物和装备宝箱 UI 选择状态。
+4. 根据试玩反馈调关卡目标分和环境伤害。

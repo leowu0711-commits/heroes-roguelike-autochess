@@ -54,6 +54,11 @@ export type CreateSessionInput = {
   shopRandomValues?: number[];
 };
 
+export type ResolveBattleInput = {
+  extraDropRoll?: number;
+  extraDropLevelRoll?: number;
+};
+
 export function createGameSession(input: CreateSessionInput = {}): GameSession {
   const pool = createPoolFromHeroes(HEROES);
   const player = {
@@ -286,7 +291,7 @@ export function moveBoardToBench(session: GameSession, boardIndex: number): Game
   };
 }
 
-export function resolveCurrentBattle(session: GameSession): GameSession {
+export function resolveCurrentBattle(session: GameSession, input: ResolveBattleInput = {}): GameSession {
   const stageDefinition = STAGES[session.stageNumber] ?? createGeneratedNormalStage(session.stageNumber);
   const stage = createBattleStage(session.stageNumber);
   const battleHeroes = session.player.board.map((owned, index) => toBattleHero(
@@ -319,12 +324,13 @@ export function resolveCurrentBattle(session: GameSession): GameSession {
       : playerAfterIncome,
   );
   const pendingReward = stageDefinition.reward.type === "none" ? [] : [stageDefinition.reward];
+  const extraDropReward = resolveExtraDropReward(stageDefinition, input);
 
   return {
     ...session,
     stageNumber: session.stageNumber + 1,
     player: { ...session.player, ...playerAfterXp, hp: playerAfterIncome.hp },
-    pendingRewards: [...session.pendingRewards, ...pendingReward],
+    pendingRewards: [...session.pendingRewards, ...pendingReward, ...extraDropReward],
     canReforge: stageDefinition.kind === "boss",
     discountedRefreshUsed: false,
     lastBattle: {
@@ -413,6 +419,25 @@ function getExtraSettlementGold(relics: RelicId[]): number {
 function applyHpLossRelics(hpLost: number, relics: RelicId[]): number {
   if (!hasRelic(relics, "life-charm")) return hpLost;
   return Math.max(1, hpLost - 2);
+}
+
+function resolveExtraDropReward(
+  stageDefinition: (typeof STAGES)[number],
+  input: ResolveBattleInput,
+): PendingReward[] {
+  const extraDrop = stageDefinition.extraDrop;
+  if (!extraDrop) return [];
+
+  const dropRoll = input.extraDropRoll ?? Math.random();
+  if (dropRoll >= extraDrop.chance) return [];
+
+  const levelRoll = input.extraDropLevelRoll ?? Math.random();
+  const levelIndex = Math.min(
+    extraDrop.equipmentLevels.length - 1,
+    Math.floor(levelRoll * extraDrop.equipmentLevels.length),
+  );
+
+  return [{ type: "equipmentChest", level: extraDrop.equipmentLevels[levelIndex] }];
 }
 
 function shiftBoardEquipmentAfterRemoval(
