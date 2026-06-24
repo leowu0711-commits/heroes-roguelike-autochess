@@ -43,26 +43,38 @@
           </div>
           <div class="zone-title">上阵</div>
           <div class="slot-grid board" id="board"></div>
+          <div class="zone-title">当前羁绊</div>
+          <div class="synergy-list" id="synergies"></div>
           <div class="zone-title">备战席</div>
           <div class="slot-grid bench" id="bench"></div>
         </section>
 
         <section class="panel reward-panel">
           <div class="panel-head">
-            <h2>奖励</h2>
+            <h2>奖励与图鉴</h2>
             <button id="nextBtn" type="button" disabled>下一关</button>
           </div>
           <div class="reward-list" id="rewards"></div>
+
           <div class="inventory">
-            <div class="zone-title">装备</div>
+            <div class="zone-title">已有装备</div>
             <div id="equipment"></div>
-            <div class="zone-title">圣物</div>
+            <div class="zone-title">已有圣物</div>
             <div id="relics"></div>
+          </div>
+
+          <div class="codex">
+            <div class="zone-title">棋子图鉴</div>
+            <div class="codex-list" id="codexHeroes"></div>
+            <div class="zone-title">装备图鉴</div>
+            <div class="codex-list" id="codexEquipment"></div>
+            <div class="zone-title">圣物图鉴</div>
+            <div class="codex-list" id="codexRelics"></div>
           </div>
         </section>
       </section>
     </main>
 
-    <script src="./app.js"></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

@@ -145,16 +145,105 @@ h2 {
 
 .battle-field {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) 120px minmax(0, 0.9fr);
+  gap: 12px;
   align-items: stretch;
 }
 
-.battle-card {
+.battle-side {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.battle-card,
+.enemy-card {
   min-height: 164px;
   padding: 10px;
   border: 1px solid var(--line);
   background: #171c1a;
+}
+
+.battle-center {
+  display: grid;
+  align-content: center;
+  gap: 16px;
+}
+
+.score-target {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.score-target strong {
+  color: var(--gold);
+  font-size: 24px;
+}
+
+.clash-line {
+  position: relative;
+  height: 72px;
+  border-block: 1px solid rgba(216, 170, 80, 0.28);
+  overflow: hidden;
+}
+
+.clash-line::before,
+.clash-line::after {
+  position: absolute;
+  inset: 22px auto auto 14px;
+  width: 88px;
+  height: 3px;
+  content: "";
+  background: var(--gold);
+  transform: rotate(16deg);
+  opacity: 0.38;
+}
+
+.clash-line::after {
+  transform: rotate(-16deg);
+}
+
+.clash-line.active::before,
+.clash-line.active::after {
+  animation: clashPulse 360ms ease-in-out infinite alternate;
+  opacity: 0.95;
+}
+
+.fighter.attacking {
+  animation: heroStrike 520ms ease-in-out infinite alternate;
+}
+
+.enemy-card {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.enemy-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #4a2520;
+  color: #ffe0a0;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.enemy-card span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.enemy-card.taking-hit {
+  animation: enemyHit 560ms ease-in-out infinite alternate;
 }
 
 .battle-report {
@@ -235,11 +324,31 @@ h2 {
   margin-top: 7px;
 }
 
-.tag {
+.tag,
+.synergy-chip,
+.codex-tags span {
   padding: 2px 6px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   color: #efe7d2;
   font-size: 12px;
+}
+
+.synergy-chips,
+.codex-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+
+.synergy-chip {
+  color: var(--muted);
+}
+
+.synergy-chip.active {
+  border-color: rgba(216, 170, 80, 0.75);
+  background: #3a321d;
+  color: #ffe0a0;
 }
 
 .cost {
@@ -301,14 +410,84 @@ h2 {
 
 .reward-list,
 #equipment,
-#relics {
+#relics,
+.synergy-list,
+.codex-list {
   display: grid;
   gap: 8px;
 }
 
 .reward,
-.item-pill {
+.item-pill,
+.synergy,
+.codex-card,
+.codex-line {
   padding: 10px;
+}
+
+.synergy {
+  border: 1px solid var(--line);
+  background: #171c1a;
+  color: var(--muted);
+}
+
+.synergy.active {
+  border-color: rgba(216, 170, 80, 0.7);
+  background: #25261b;
+  color: var(--text);
+}
+
+.synergy strong,
+.synergy span {
+  display: block;
+}
+
+.synergy span {
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.codex {
+  margin-top: 14px;
+}
+
+.codex-list {
+  max-height: 280px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.codex-card {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 9px;
+  border: 1px solid var(--line);
+  background: #171c1a;
+}
+
+.codex-card .portrait {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+}
+
+.codex-card p {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.codex-line {
+  display: grid;
+  gap: 4px;
+  border: 1px solid var(--line);
+  background: #171c1a;
+}
+
+.codex-line span {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .reward button {
@@ -322,6 +501,40 @@ h2 {
 
 .log-loss {
   color: #e67d68;
+}
+
+@keyframes heroStrike {
+  from {
+    transform: translateX(0);
+    border-color: var(--line);
+  }
+
+  to {
+    transform: translateX(8px);
+    border-color: var(--gold);
+  }
+}
+
+@keyframes enemyHit {
+  from {
+    transform: translateX(0);
+    filter: brightness(1);
+  }
+
+  to {
+    transform: translateX(-7px);
+    filter: brightness(1.28);
+  }
+}
+
+@keyframes clashPulse {
+  from {
+    transform: scaleX(0.72) rotate(16deg);
+  }
+
+  to {
+    transform: scaleX(1.08) rotate(16deg);
+  }
 }
 
 @media (max-width: 900px) {
@@ -352,6 +565,15 @@ h2 {
   .battle-field,
   .board,
   .bench {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .battle-center {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  .battle-side {
     grid-template-columns: repeat(2, 1fr);
   }
 }
