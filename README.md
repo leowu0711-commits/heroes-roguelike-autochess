@@ -34,7 +34,10 @@
 
 ```bash
 npm.cmd test
+npm.cmd run demo
 ```
+
+运行 demo 后打开终端显示的本地地址，例如 `http://localhost:4173`，即可试玩草稿版。
 
 ## 目录
 
@@ -46,6 +49,7 @@ npm.cmd test
 - `src/relic.ts`：圣物宝箱和圣物工具函数。
 - `src/content.ts`：英雄、装备、圣物配置。
 - `src/*.test.ts`：规则和配置测试。
+- `demo/`：浏览器草稿试玩版。
 - `docs/art-direction.md`：GPT 图像生成用的美术规格。
 
 ## 下一步

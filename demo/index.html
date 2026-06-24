@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>群英乱斗棋 Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="seal">英</div>
+          <div>
+            <h1>群英乱斗棋</h1>
+            <p id="phaseText">准备阶段</p>
+          </div>
+        </div>
+        <div class="stats" id="stats"></div>
+      </header>
+
+      <section class="battle">
+        <div class="battle-field" id="battleField"></div>
+        <aside class="battle-report" id="battleReport"></aside>
+      </section>
+
+      <section class="layout">
+        <section class="panel shop-panel">
+          <div class="panel-head">
+            <h2>商店</h2>
+            <div class="actions">
+              <button id="refreshBtn" type="button">刷新 2金</button>
+              <button id="xpBtn" type="button">买经验 4金</button>
+            </div>
+          </div>
+          <div class="shop-grid" id="shop"></div>
+        </section>
+
+        <section class="panel roster-panel">
+          <div class="panel-head">
+            <h2>阵容</h2>
+            <button id="battleBtn" class="primary" type="button">开始战斗</button>
+          </div>
+          <div class="zone-title">上阵</div>
+          <div class="slot-grid board" id="board"></div>
+          <div class="zone-title">备战席</div>
+          <div class="slot-grid bench" id="bench"></div>
+        </section>
+
+        <section class="panel reward-panel">
+          <div class="panel-head">
+            <h2>奖励</h2>
+            <button id="nextBtn" type="button" disabled>下一关</button>
+          </div>
+          <div class="reward-list" id="rewards"></div>
+          <div class="inventory">
+            <div class="zone-title">装备</div>
+            <div id="equipment"></div>
+            <div class="zone-title">圣物</div>
+            <div id="relics"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
